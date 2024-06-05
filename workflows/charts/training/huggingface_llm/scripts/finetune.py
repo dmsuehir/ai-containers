@@ -85,7 +85,7 @@ class ModelArguments:
         default=None,
         metadata={
             "help": "The model checkpoint for weights initialization."
-            "Don't set if you want to train a model from scratch."
+                    "Don't set if you want to train a model from scratch."
         },
     )
     config_name: Optional[str] = field(
@@ -224,7 +224,7 @@ class DataArguments:
         default=512,
         metadata={
             "help": "The maximum total input sequence length after tokenization. Sequences longer "
-            "than this will be truncated."
+                    "than this will be truncated."
         },
     )
     validation_split_percentage: Optional[float] = field(
@@ -240,21 +240,21 @@ class DataArguments:
         default=False,
         metadata={
             "help": "Whether to pad all samples to `max_seq_length`. "
-            "If False, will pad the samples dynamically when batching to the maximum length in the batch."
+                    "If False, will pad the samples dynamically when batching to the maximum length in the batch."
         },
     )
     max_train_samples: Optional[int] = field(
         default=None,
         metadata={
             "help": "For debugging purposes or quicker training, truncate the number of training examples to this "
-            "value if set."
+                    "value if set."
         },
     )
     max_eval_samples: Optional[int] = field(
         default=None,
         metadata={
             "help": "For debugging purposes or quicker training, truncate the number of evaluation examples to this "
-            "value if set."
+                    "value if set."
         },
     )
     keep_in_memory: bool = field(
@@ -299,6 +299,27 @@ class DataArguments:
         default="Below is an instruction that describes a task. Write a response that appropriately completes the "
                 "request.",
         metadata={"help": "The prompt string to use with an instruction that does not include an input/context string."}
+    )
+    instruction_column_name: Optional[str] = field(
+        default=None,
+        metadata={
+            "help": "Name of the column in the dataset that describes the task that the model should perform. By "
+                    "default, the 'instruction' column is used for non-SQL prompts and the 'question' column is used for SQL prompts."
+        },
+    )
+    input_column_name: Optional[str] = field(
+        default=None,
+        metadata={
+            "help": "Name of the column in the dataset that optionally provides context or input for the task. By "
+                    "default, the 'input' column is used for non-SQL prompts and the 'context' column is used for SQL prompts."
+        },
+    )
+    output_column_name: Optional[str] = field(
+        default=None,
+        metadata={
+            "help": "Name of the column in the dataset with the answer to the instruction. By default, the "
+                    "'output' column is used for non-SQL prompts and the 'answer' column is used for SQL prompts."
+        },
     )
 
 
@@ -642,6 +663,16 @@ def main():
 
     dataset_keys = ["train"]
 
+    for key in raw_datasets:
+        if data_args.instruction_column_name:
+            raw_datasets[key] = raw_datasets[key].rename_column(data_args.instruction_column_name, "instruction")
+
+        if data_args.input_column_name:
+            raw_datasets[key] = raw_datasets[key].rename_column(data_args.input_column_name, "input")
+
+        if data_args.output_column_name:
+            raw_datasets[key] = raw_datasets[key].rename_column(data_args.output_column_name, "output")
+
     # If no test data is there, validation_split_percentage will be used to divide the dataset.
     if "test" not in raw_datasets.keys() and training_args.do_eval:
         logger.info("Original dataset length: {}".format(len(raw_datasets["train"])))
@@ -696,12 +727,12 @@ def main():
         )
         for i in range(len(results["input_ids"])):
             if (results["input_ids"][i][-1] != tokenizer.eos_token_id and
-                    len(results["input_ids"][i]) < data_args.max_seq_length and add_eos_token):
+                        len(results["input_ids"][i]) < data_args.max_seq_length and add_eos_token):
                 results["input_ids"][i].append(tokenizer.eos_token_id)
                 results["attention_mask"][i].append(1)
-            # elif (results["input_ids"][i][-1] != tokenizer.eos_token_id and add_eos_token):
-            #     results["input_ids"][i][-1] = tokenizer.eos_token_id
-            #     results["attention_mask"][i][-1] = 1
+                # elif (results["input_ids"][i][-1] != tokenizer.eos_token_id and add_eos_token):
+                #     results["input_ids"][i][-1] = tokenizer.eos_token_id
+                #     results["attention_mask"][i][-1] = 1
 
         results["labels"] = copy.deepcopy(results["input_ids"])
         for i in range(len(results_system["input_ids"])):
