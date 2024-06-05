@@ -154,7 +154,7 @@ class ModelArguments:
         metadata={
             "help": (
                 "Whether to run attention softmax layer in bf16 precision for fine-tuning. The current support is "
-                "limited to Llama only.",
+                "limited to Llama only."
             )
         },
     )
@@ -162,7 +162,7 @@ class ModelArguments:
         default=False,
         metadata={
             "help": (
-                "Whether to use Habana flash attention for fine-tuning. The current support is limited to Llama only.",
+                "Whether to use Habana flash attention for fine-tuning. The current support is limited to Llama only."
             )
         },
     )
@@ -171,7 +171,7 @@ class ModelArguments:
         metadata={
             "help": (
                 "Whether to enable recompute in Habana flash attention for fine-tuning."
-                " It is applicable only when use_flash_attention is True.",
+                " It is applicable only when use_flash_attention is True."
             )
         },
     )
@@ -180,7 +180,7 @@ class ModelArguments:
         metadata={
             "help": (
                 "Whether to enable causal mask in Habana flash attention for fine-tuning."
-                " It is applicable only when use_flash_attention is True.",
+                " It is applicable only when use_flash_attention is True."
             )
         },
     )
@@ -188,7 +188,7 @@ class ModelArguments:
         default=True,
         metadata={
             "help": (
-                "Whether to use Habana fused-rope for fine-tuning. The current support is limited to Llama only.",
+                "Whether to use Habana fused-rope for fine-tuning. The current support is limited to Llama only."
             )
         },
     )
@@ -727,12 +727,9 @@ def main():
         )
         for i in range(len(results["input_ids"])):
             if (results["input_ids"][i][-1] != tokenizer.eos_token_id and
-                        len(results["input_ids"][i]) < data_args.max_seq_length and add_eos_token):
+                    len(results["input_ids"][i]) < data_args.max_seq_length and add_eos_token):
                 results["input_ids"][i].append(tokenizer.eos_token_id)
                 results["attention_mask"][i].append(1)
-                # elif (results["input_ids"][i][-1] != tokenizer.eos_token_id and add_eos_token):
-                #     results["input_ids"][i][-1] = tokenizer.eos_token_id
-                #     results["attention_mask"][i][-1] = 1
 
         results["labels"] = copy.deepcopy(results["input_ids"])
         for i in range(len(results_system["input_ids"])):

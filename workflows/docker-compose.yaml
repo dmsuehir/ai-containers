@@ -30,6 +30,6 @@ services:
         org.opencontainers.image.title: "Intel® Extension for PyTorch with Hugging Face LLM fine tuning"
         org.opencontainers.image.version: torch-${PYTORCH_VERSION:-2.3.0}-huggingface-multinode-${PYTHON_VERSION:-3.10}
     command: >
-      sh -c "python -c 'import transformers; print(\" transformers:\", transformers.__version__);'"
+      sh -c "python /workspace/scripts/finetune.py --help"
     image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-torch-${PYTORCH_VERSION:-2.3.0}-huggingface-multinode-${PYTHON_VERSION:-3.10}
     pull_policy: always
