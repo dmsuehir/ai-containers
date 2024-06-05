@@ -5,8 +5,8 @@ secret:
   encodedToken: 
 
 image:
-  name: amr-registry.caas.intel.com/aiops/mlops-ci
-  tag: dmsuehir-huggingface-torch-2.3.0-new
+  name: 
+  tag: 
   pullPolicy: Always
 
 securityContext:
@@ -84,11 +84,11 @@ envVars:
   hfDatasetsCache: /tmp/pvc-mount/hf_dataset_cache
   hfHome: /tmp/home
   cclWorkerCount: 0
-  httpProxy: http://proxy-dmz.intel.com:911
-  httpsProxy: http://proxy-dmz.intel.com:912
-  noProxy: localhost,127.0.0.1,10.0.0.0/8,172.0.0.0/8
-  ftpProxy: ftp://proxy-dmz.intel.com:911/
-  socksProxy: socks://proxy-dmz.intel.com:911/
+  httpProxy: 
+  httpsProxy: 
+  noProxy: 
+  ftpProxy: 
+  socksProxy: 
 
 # Resources allocated to each worker
 resources:
